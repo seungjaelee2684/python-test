@@ -20,12 +20,84 @@ function handleClickGotoLogin(e) {
     formBox1.style.opacity = "1";
 };
 
-function handleClickLogin(e) {
-    e.preventDefault();
-    const loginButton = document.getElementById("login");
-    window.location.href = "/src/pages/dashboard.html";
-};
-
 document.getElementById("goSignup").addEventListener("click", handleClickGotoSignup);
 document.getElementById("goLogin").addEventListener("click", handleClickGotoLogin);
-document.getElementById("login").addEventListener("click", handleClickLogin);
+
+
+function postHandleClickLogin(e) {
+    e.preventDefault();
+    const id = document.getElementById("login_id").value;
+    const password = document.getElementById("login_password").value;
+    const errorText = document.getElementById("login_error_text");
+
+    const fetchData = {
+        username: id,
+        password: password
+    };
+
+    if (id.length <= 0) return errorText.innerText = "아이디를 입력해주세요.";
+    if (password.length <= 0) return errorText.innerText = "비밀번호를 입력해주세요.";
+
+    fetch("http://127.0.0.1:5000/auth/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(fetchData)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.state === 200) {
+            errorText.style.color = "#333333";
+            errorText.innerText = "";
+
+            const newDate = new Date();
+            newDate.setTime(newDate.getTime() + (60 * 60 * 1000));
+
+            document.cookie = `access_token=${data.access_token}; expires=${newDate.toUTCString()}; path=/;`;
+            document.cookie = `user_id=${data.user_id}; expires=${newDate.toUTCString()}; path=/;`;
+            window.location.href = "/dashboard.html";
+        } else {
+            errorText.innerText = data.error;
+        };
+    });
+};
+
+function postHandleClickSignup(e) {
+    e.preventDefault();
+    const id = document.getElementById("signup_id").value;
+    const password = document.getElementById("signup_password").value;
+    const passwordCurrent = document.getElementById("signup_password_current").value;
+    const errorText = document.getElementById("signup_error_text");
+
+    const fetchData = {
+        username: id,
+        password: password
+    };
+
+    if (id.length <= 0) return errorText.innerText = "아이디를 입력해주세요.";
+    if (password.length <= 0) return errorText.innerText = "비밀번호를 입력해주세요.";
+    if (password !== passwordCurrent) return errorText.innerText = "입력하신 비밀번호가 서로 일치하지 않습니다."; 
+
+    fetch("http://127.0.0.1:5000/auth/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(fetchData)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.state === 201) {
+            alert(data.message);
+            errorText.style.color = "#333333";
+            errorText.innerText = "";
+            window.location.reload();
+        } else {
+            errorText.innerText = data.error;
+        };
+    });
+};
+
+document.getElementById("login").addEventListener("click", postHandleClickLogin);
+document.getElementById("signup").addEventListener("click", postHandleClickSignup);

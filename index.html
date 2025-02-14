@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="/src/styles/main.css">
 </head>
 
 <body>
@@ -18,15 +18,26 @@
         <form id="login_form_container_1">
           <h1 class="form_title">Login</h1>
           <div class="input_wrapper">
-            <input type="text" class="form_input" placeholder="">
+            <input
+              id="login_id"
+              type="text"
+              class="form_input"
+              autocomplete="off"
+              placeholder="">
             <label for="" class="form_label">ID</label>
           </div>
           <div class="input_wrapper">
-            <input type="text" class="form_input" placeholder="">
+            <input
+              id="login_password"
+              type="password"
+              class="form_input"
+              autocomplete="off"
+              placeholder="">
             <label for="" class="form_label">PASSWORD</label>
           </div>
+          <div id="login_error_text" class="error_text"></div>
           <div class="button_wrapper">
-            <button id="login" class="primary_button">
+            <button id="login" class="primary_button" type="submit">
               Login
             </button>
             <button id="goSignup" class="outline_button">
@@ -39,26 +50,42 @@
           <div class="input_container">
             <label for="" class="form_label_default">ID</label>
             <div class="input_wrapper">
-              <input type="text" class="form_input" placeholder="아이디를 입력해주세요.">
+              <input
+                id="signup_id"
+                type="text"
+                class="form_input"
+                autocomplete="off"
+                placeholder="아이디를 입력해주세요.">
             </div>
           </div>
           <div class="input_container">
             <label for="" class="form_label_default">Password</label>
             <div class="input_wrapper">
-              <input type="password" class="form_input" placeholder="비밀번호를 입력해주세요.">
+              <input
+                id="signup_password"
+                type="password"
+                class="form_input"
+                autocomplete="off"
+                placeholder="비밀번호를 입력해주세요.">
             </div>
           </div>
           <div class="input_container">
             <label for="" class="form_label_default">Password Current</label>
             <div class="input_wrapper">
-              <input type="password" class="form_input" placeholder="비밀번호를 입력해주세요.">
+              <input
+                id="signup_password_current"
+                type="password"
+                class="form_input"
+                autocomplete="off"
+                placeholder="비밀번호를 입력해주세요.">
             </div>
           </div>
+          <div id="signup_error_text" class="error_text"></div>
           <div class="button_wrapper">
             <button id="goLogin" class="outline_button">
               Go to Login
             </button>
-            <button id="signup" class="primary_button">
+            <button id="signup" class="primary_button" type="submit">
               Sign up
             </button>
           </div>
@@ -67,7 +94,7 @@
     </article>
   </main>
 
-  <script src="../scripts/main.js"></script>
+  <script src="/src/scripts/main.js"></script>
 </body>
 
 </html>

@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../styles/dashboard.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <link rel="stylesheet" href="../styles/header.css">
+    <link rel="stylesheet" href="/src/styles/dashboard.css">
+    <link rel="stylesheet" href="/src/styles/main.css">
+    <link rel="stylesheet" href="/src/styles/header.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
     <main>
         <article>
+            <section class="dashboard_header">
+                <div class="dashboard_header_title_wrapper">
+                    <div id="dashboard_header_title"></div>
+                    <button id="logout" title="로그아웃 하기">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </section>
             <section class="dashboard_container">
                 <div class="dashboard_wrapper">
                     <h1 class="dashboard_title">Dashboard</h1>
@@ -36,21 +47,21 @@
                             <a href="" class="post_link">
                                 <span class="post_tag"># 즐겨찾기</span>
                                 <label for="" class="post_title">점핏</label>
-                                <span class="post_id">sean2684</span>
+                                <span class="post_id">sean2684 님</span>
                             </a>
                         </li>
                         <li class="dashboard_post_lane">
                             <a href="" class="post_link">
                                 <span class="post_tag"># 즐겨찾기</span>
                                 <label for="" class="post_title">토스</label>
-                                <span class="post_id">sean2684</span>
+                                <span class="post_id">sean2684 님</span>
                             </a>
                         </li>
                         <li class="dashboard_post_lane">
                             <a href="" class="post_link">
                                 <span class="post_tag"># 업무 활용 자료</span>
-                                <label for="" class="post_title">넥슨</label>
-                                <span class="post_id">sean2684</span>
+                                <label for="" class="post_title">잡코리아</label>
+                                <span class="post_id">sean2684 님</span>
                             </a>
                         </li>
                     </ul>
@@ -58,6 +69,8 @@
             </section>
         </article>
     </main>
-    <script src="../scripts/dashboard.js"></script>
+
+    <script src="/src/scripts/dashboard.js"></script>
 </body>
+
 </html>
