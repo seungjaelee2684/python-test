@@ -1,34 +1,222 @@
-.body {
-  width: 100%;
-  min-height: 100dvh;
+* {
+  padding: 0;
+  margin: 0;
+  line-height: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  box-sizing: border-box;
 }
 
-.main {
+a {
+  text-decoration: none; /* 밑줄 제거 */
+  color: inherit; /* 부모 요소의 텍스트 색상 상속 */
+  background: none; /* 배경 제거 */
+  border: none; /* 테두리 제거 */
+  outline: none; /* 포커스 시 외곽선 제거 */
+}
+
+ol, ul {
+  list-style: none;
+}
+
+li {
+  list-style-type: none;
+}
+
+html {
+  width: 100%;
+  color: #333333;
+}
+
+body {
+  width: 100%;
+  min-height: 100dvh;
+  font-size: 1rem;
+}
+
+main {
   width: 100%;
   height: 100%;
   position: relative;
   color: #333333;
 }
 
-.article {
+article {
   width: 100%;
+  height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: start;
+  padding: 40px 0px;
 }
 
-.main_container {
-  width: 50%;
+.main_login_form {
+  width: 1140px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #d8e7f6;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+#login_form_container_1 {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: center;
   align-items: start;
+  user-select: none;
+  padding: 40px 100px;
+  transition: all 0.2s;
+  opacity: 1;
 }
 
-.login_form_container {
+#login_form_container_2 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  user-select: none;
+  padding: 40px 100px;
+  transition: all 0.2s;
+  opacity: 0;
+}
+
+#bg_form_container {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fefefe;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 40;
+  right: 0;
+  left: auto;
+  z-index: 2;
+  background-color: #A7C7E7;
+  transition: all 0.5s ease-in-out;
+}
+
+.form_title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 60px;
+  color: #A7C7E7;
+}
+
+.input_container {
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.input_wrapper {
+  width: 100%;
+  height: 34px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 16px;
+  padding: 0px 16px;
+  border: 1px solid #A7C7E7;
+  position: relative;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.form_label {
+  font-size: 0.8rem;
+  line-height: 100%;
+  padding: 0px 4px;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%);
+  color: #c0c0c0;
+  background-color: #ffffff;
+  transition: all 0.2s ease-in-out;
+}
+
+.form_label_default {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.form_input {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  border: none;
+  outline: none;
+  font-size: 0.8rem;
+  background-color: transparent;
+}
+
+.form_input::placeholder {
+  display: none;
+  color: #c0c0c0;
+}
+
+.form_input:focus ~ .form_label,
+.form_input:not(:placeholder-shown) ~ .form_label {
+  font-size: 0.7rem;
+  top: 0;
+  color: #A7C7E7;
+}
+
+.button_wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+}
+
+.primary_button {
+  min-width: fit-content;
+  width: fit-content;
+  height: fit-content;
+  padding: 8px 16px;
+  font-size: 1rem;
+  background-color: #A7C7E7;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  color: #fefefe;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.outline_button {
+  min-width: fit-content;
+  width: fit-content;
+  height: fit-content;
+  padding: 8px 16px;
+  font-size: 1rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  color: #A7C7E7;
+  font-weight: 500;
+  cursor: pointer;
 }

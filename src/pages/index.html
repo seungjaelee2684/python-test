@@ -1,25 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="../styles/main.css">
 </head>
+
 <body>
   <main>
     <article>
-      <section class="main_container">
-        
-      </section>
       <section class="main_login_form">
-        <form class="login_form_container">
+        <div id="bg_form_container">
+          내 계정에 로그인
+        </div>
+        <form id="login_form_container_1">
           <h1 class="form_title">Login</h1>
-          <label for="" class="form_label">ID</label>
-          <input type="text" class="form_input">
+          <div class="input_wrapper">
+            <input type="text" class="form_input" placeholder="">
+            <label for="" class="form_label">ID</label>
+          </div>
+          <div class="input_wrapper">
+            <input type="text" class="form_input" placeholder="">
+            <label for="" class="form_label">PASSWORD</label>
+          </div>
+          <div class="button_wrapper">
+            <button id="login" class="primary_button">
+              Login
+            </button>
+            <button id="goSignup" class="outline_button">
+              Go to Sign up
+            </button>
+          </div>
+        </form>
+        <form id="login_form_container_2">
+          <h1 class="form_title">Sign up</h1>
+          <div class="input_container">
+            <label for="" class="form_label_default">ID</label>
+            <div class="input_wrapper">
+              <input type="text" class="form_input" placeholder="아이디를 입력해주세요.">
+            </div>
+          </div>
+          <div class="input_container">
+            <label for="" class="form_label_default">Password</label>
+            <div class="input_wrapper">
+              <input type="password" class="form_input" placeholder="비밀번호를 입력해주세요.">
+            </div>
+          </div>
+          <div class="input_container">
+            <label for="" class="form_label_default">Password Current</label>
+            <div class="input_wrapper">
+              <input type="password" class="form_input" placeholder="비밀번호를 입력해주세요.">
+            </div>
+          </div>
+          <div class="button_wrapper">
+            <button id="goLogin" class="outline_button">
+              Go to Login
+            </button>
+            <button id="signup" class="primary_button">
+              Sign up
+            </button>
+          </div>
         </form>
       </section>
     </article>
   </main>
+
+  <script src="../scripts/main.js"></script>
 </body>
+
 </html>
