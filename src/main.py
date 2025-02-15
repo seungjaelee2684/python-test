@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 
 app = Flask(__name__)
 CORS(app, resources={
-  r"/link/*": {"origins": "http://localhost:8000"},
-  r"/app/*": {"origins": "http://localhost:8000"}
+  r"/link/*": {"origins": "http://localhost:8000", "allow_headers": ["Authorization", "Content-Type"]},
+  r"/auth/*": {"origins": "http://localhost:8000", "allow_headers": ["Authorization", "Content-Type"]}
 })
 
 load_dotenv()

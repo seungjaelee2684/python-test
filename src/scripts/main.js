@@ -47,7 +47,7 @@ function postHandleClickLogin(e) {
     })
     .then(res => res.json())
     .then(data => {
-        if (data.state === 200) {
+        if (data.state === 201) {
             errorText.style.color = "#333333";
             errorText.innerText = "";
 
