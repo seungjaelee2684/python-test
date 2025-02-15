@@ -158,13 +158,14 @@ article {
   left: 8px;
   transform: translateY(-50%);
   color: #c0c0c0;
-  background-color: #ffffff;
+  background-color: transparent;
   transition: all 0.2s;
 }
 
 .form_label_default {
   font-size: 1rem;
   font-weight: 600;
+  padding-left: 4px;
 }
 
 .form_input {
@@ -189,6 +190,7 @@ article {
   font-size: 0.8rem;
   top: 0;
   color: #A7C7E7;
+  background-color: #ffffff;
 }
 
 .error_text {

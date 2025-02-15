@@ -12,13 +12,12 @@ def inquiry():
   tag = request.args.get("tag")
   authorization_header = request.headers.get("Authorization")
   access_token = authorization_header.split(" ")[1]
+  verify_token = decode_token(access_token)
   
   links = []
 
-  if access_token:
+  if verify_token:
     try:
-      decode_token = decode_token(access_token)
-
       conn = sqlite3.connect("users.db")
       cursor = conn.cursor()
 
@@ -38,10 +37,12 @@ def inquiry():
 # 웹 링크 업로드
 @link.route("/upload", methods=["POST"])
 @cross_origin(origins="http://localhost:8000")
-def inquiry():
+def upload():
   authorization_header = request.headers.get("Authorization")
   access_token = authorization_header.split(" ")[1]
-  decode_token = decode_token(access_token)
+  verify_token = decode_token(access_token)
+  user_id = verify_token.get("sub")
+
   data = request.get_json()
   name = data.get("name")
   url = data.get("url")
@@ -49,7 +50,7 @@ def inquiry():
   description = data.get("description")
   shared_id = data.get("shared_id")
 
-  if decode_token:
+  if verify_token:
     conn = sqlite3.connect("users.db")
     cursor = conn.cursor()
 
@@ -57,9 +58,9 @@ def inquiry():
     conn.close()
     try:
       cursor.execute("""
-        INSERT INTO links (name, url, category, description, shared_id)
-        VALUES (?, ?, ?, ?, ?)
-      """, (name, url, category, description, shared_id))      
+        INSERT INTO links (created_by, name, url, category, description, shared_id)
+        VALUES (?, ?, ?, ?, ?, ?)
+      """, (user_id, name, url, category, description, shared_id))      
 
       
       return jsonify({"state": 200, "data": links, "message": "조회에 성공하였습니다!"}), 200
