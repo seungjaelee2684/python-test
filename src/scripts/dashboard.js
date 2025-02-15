@@ -1,4 +1,4 @@
-import { getAccessTokenFromCookie } from './utils.js';
+let linkList = [];
 
 fetch('header.html')
     .then(response => response.text())
@@ -6,32 +6,10 @@ fetch('header.html')
         document.body.insertAdjacentHTML('beforeend', data);
     });
 
-function checkAccessTokenAndRedirect() {
-    const accessToken = getAccessTokenFromCookie("access_token");
-    const userId = getAccessTokenFromCookie("user_id");
-    if (!accessToken) return window.location.href = "/index.html";
-
-    const headerTitle = document.getElementById("dashboard_header_title");
-    headerTitle.innerText = `어서오세요, ${userId} 님!`;
-
-    fetch("http://127.0.0.1:5000/link/inquiry", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${accessToken}`
-        },
-    })
-        .then(res => res.json())
-        .then(data => {
-            if (data.state === 200) {
-                console.log('성공', data.message, data.data);
-            } else {
-                console.log('실패', data.error);
-            };
-        });
-}
-
-window.onload = checkAccessTokenAndRedirect; // 페이지 로드 시 바로 실행
+function getAccessTokenFromCookie(name) {
+    const cookies = new URLSearchParams(document.cookie.replace(/; /g, '&'));
+    return (cookies) ? cookies.get(name) : null;
+};
 
 function handleClickLogout(e) {
     e.preventDefault();
@@ -41,3 +19,72 @@ function handleClickLogout(e) {
 };
 
 document.getElementById("logout").addEventListener("click", handleClickLogout);
+
+function getCategoryFromHash() {
+    return window.location.hash.replace("#", "") || null; // 기본값 설정
+}
+
+async function renderList(category) {
+    let data;
+
+    const accessToken = getAccessTokenFromCookie("access_token");
+    const userId = getAccessTokenFromCookie("user_id");
+    if (!accessToken) return window.location.href = "/index.html";
+
+    const headerTitle = document.getElementById("dashboard_header_title");
+    headerTitle.innerText = `어서오세요, ${userId} 님!`;
+
+    const ul = document.getElementById("dashboard_post_list");
+    ul.innerHTML = "";
+
+    const fetchLink = (category)
+        ? `http://127.0.0.1:5000/link/inquiry?tag=${category}`
+        : "http://127.0.0.1:5000/link/inquiry"
+
+    try {
+        const response = await fetch(fetchLink, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`
+            },
+        });
+        
+        data = await response.json();
+    } catch (error) {
+        console.error("error: ", error.message);
+    };
+
+    data?.data.forEach(item => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        const spanTag = document.createElement("span");
+        const label = document.createElement("label");
+        const spanId = document.createElement("span");
+
+        li.classList.add("dashboard_post_lane");
+        a.classList.add("post_link");
+        spanTag.classList.add("post_tag");
+        label.classList.add("post_title");
+        spanId.classList.add("post_id");
+
+        a.href = item?.link;
+        spanTag.textContent = `# ${item?.category}`;
+        label.textContent = `# ${item?.name}`;
+        spanId.textContent = `# ${item?.created_by}`;
+
+        a.appendChild(spanTag);
+        a.appendChild(label);
+        a.appendChild(spanId);
+        li.appendChild(a);
+        ul.appendChild(li);
+    });
+}
+
+function updateList() {
+    const category = getCategoryFromHash();
+    renderList(category);
+}
+
+window.addEventListener("hashchange", updateList);
+updateList();
