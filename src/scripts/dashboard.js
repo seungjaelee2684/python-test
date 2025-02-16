@@ -1,15 +1,17 @@
-let linkList = [];
-
-fetch('header.html')
-    .then(response => response.text())
-    .then(data => {
-        document.body.insertAdjacentHTML('beforeend', data);
-    });
+const categoryObj = {
+    "bookmark": "즐겨찾기",
+    "business": "업무 활용 자료",
+    "reference": "참고 자료",
+    "education": "교육 및 학습 자료"
+};
 
 function getAccessTokenFromCookie(name) {
     const cookies = new URLSearchParams(document.cookie.replace(/; /g, '&'));
     return (cookies) ? cookies.get(name) : null;
 };
+
+const accessToken = getAccessTokenFromCookie("access_token");
+const userId = getAccessTokenFromCookie("user_id");
 
 function handleClickLogout(e) {
     e.preventDefault();
@@ -27,8 +29,6 @@ function getCategoryFromHash() {
 async function renderList(category) {
     let data;
 
-    const accessToken = getAccessTokenFromCookie("access_token");
-    const userId = getAccessTokenFromCookie("user_id");
     if (!accessToken) return window.location.href = "/index.html";
 
     const headerTitle = document.getElementById("dashboard_header_title");
@@ -49,7 +49,7 @@ async function renderList(category) {
                 "Authorization": `Bearer ${accessToken}`
             },
         });
-        
+
         data = await response.json();
     } catch (error) {
         console.error("error: ", error.message);
@@ -68,10 +68,11 @@ async function renderList(category) {
         label.classList.add("post_title");
         spanId.classList.add("post_id");
 
-        a.href = item?.link;
-        spanTag.textContent = `# ${item?.category}`;
-        label.textContent = `# ${item?.name}`;
-        spanId.textContent = `# ${item?.created_by}`;
+        a.href = item?.url;
+        a.target = '_blank';
+        spanTag.textContent = `# ${categoryObj[item?.category]}`;
+        label.textContent = `${item?.name}`;
+        spanId.textContent = `${item?.created_by} 님`;
 
         a.appendChild(spanTag);
         a.appendChild(label);
@@ -88,3 +89,58 @@ function updateList() {
 
 window.addEventListener("hashchange", updateList);
 updateList();
+
+function handleClickAddLinkModalOpen() {
+    const modalBg = document.getElementById("modal_background");
+    const modalBox = document.getElementById("modal_container");
+    modalBg.style.visibility = "visible";
+    modalBox.style.visibility = "visible";
+    modalBox.style.opacity = "1";
+};
+document.getElementById("add_link_button").addEventListener("click", handleClickAddLinkModalOpen);
+
+function handleClickCloseModal(e) {
+    e.preventDefault();
+    const modalBg = document.getElementById("modal_background");
+    const modalBox = document.getElementById("modal_container");
+    modalBg.style.visibility = "hidden";
+    modalBox.style.visibility = "hidden";
+    modalBox.style.opacity = "0";
+};
+document.getElementById("modal_close_button").addEventListener("click", handleClickCloseModal);
+
+function handleClickUploadLink(e) {
+    e.preventDefault();
+    const name = document.querySelector('input[name="name"]').value;
+    const description = document.querySelector('input[name="description"]').value;
+    const url = document.querySelector('input[name="url"]').value;
+    const shared_id = document.querySelector('input[name="shared_id"]').value;
+    const category = document.querySelector('input[name="category"]:checked').value;
+
+    const uploadData = {
+        name: name,
+        description: description,
+        url: url,
+        shared_id: (shared_id.length > 0) ? JSON.stringify([shared_id]) : JSON.stringify([]),
+        category: category
+    };
+
+    fetch("http://127.0.0.1:5000/link/upload", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+        },
+        body: JSON.stringify(uploadData)
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.state === 200) {
+                alert(data.message);
+                window.location.href = "/";
+            } else {
+                alert(data.message);
+            };
+        });
+};
+document.getElementById("modal_upload_button").addEventListener("click", handleClickUploadLink);
