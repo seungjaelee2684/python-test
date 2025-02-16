@@ -2,6 +2,7 @@ import sqlite3
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import decode_token
 from flask_cors import cross_origin
+from typing import List, Dict, Any
 
 link = Blueprint('link', __name__)
 
@@ -11,14 +12,19 @@ link = Blueprint('link', __name__)
 def inquiry():
   tag = request.args.get("tag")
   authorization_header = request.headers.get("Authorization")
-  access_token = authorization_header.split(" ")[1]
-  verify_token = decode_token(access_token)
+
+  if authorization_header:
+    access_token = authorization_header.split(" ")[1]
+    verify_token = decode_token(access_token)
+  else:
+    verify_token = False
   
   links = []
 
   if verify_token:
     try:
       conn = sqlite3.connect("users.db")
+      conn.row_factory = sqlite3.Row
       cursor = conn.cursor()
 
       if tag:
@@ -26,7 +32,7 @@ def inquiry():
       else:
         cursor.execute("SELECT * FROM links")
 
-      links = cursor.fetchall()
+      links: List[Dict[str, Any]] = [dict(row) for row in cursor.fetchall()]
       conn.close()
       return jsonify({"state": 200, "data": links, "message": "조회에 성공하였습니다!"}), 200
     except Exception as e:
@@ -53,18 +59,18 @@ def upload():
   if verify_token:
     conn = sqlite3.connect("users.db")
     cursor = conn.cursor()
-
-    links = cursor.fetchall()
-    conn.close()
+    
     try:
       cursor.execute("""
         INSERT INTO links (created_by, name, url, category, description, shared_id)
         VALUES (?, ?, ?, ?, ?, ?)
-      """, (user_id, name, url, category, description, shared_id))      
-
+      """, (user_id, name, url, category, description, shared_id))   
+      conn.commit()   
       
-      return jsonify({"state": 200, "data": links, "message": "조회에 성공하였습니다!"}), 200
+      return jsonify({"state": 200, "message": "업로드에 성공하였습니다!"}), 200
     except Exception as e:
-      return jsonify({"state": 200, "data": links, "message": "조회에 성공하였습니다!"}), 200
+      return jsonify({"state": 403, "error": str(e), "message": "업로드에 실패하였습니다..."}), 403
+    finally:
+      conn.close()
   else:
-    return jsonify({"state": 401, "error": "조회에 실패하였습니다..."}), 401
+    return jsonify({"state": 401, "message": "업로드에 실패하였습니다..."}), 401

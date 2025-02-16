@@ -28,7 +28,7 @@
 .header_title {
     font-size: 2rem;
     font-weight: 700;
-    
+
 }
 
 .header_search_box {
@@ -123,7 +123,7 @@
     font-weight: 600;
 }
 
-.add_sharing_button {
+.add_link_button {
     width: 240px;
     height: fit-content;
     border-radius: 8px;
@@ -146,6 +146,6 @@
     font-size: 1.4rem;
 }
 
-.add_sharing_button:hover {
+.add_link_button:hover {
     color: #c5c5c5;
 }
