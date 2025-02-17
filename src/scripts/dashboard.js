@@ -5,34 +5,28 @@ const categoryObj = {
     "education": "교육 및 학습 자료"
 };
 
+// accessToken 추출
 function getAccessTokenFromCookie(name) {
     const cookies = new URLSearchParams(document.cookie.replace(/; /g, '&'));
     return (cookies) ? cookies.get(name) : null;
 };
-
 const accessToken = getAccessTokenFromCookie("access_token");
 const userId = getAccessTokenFromCookie("user_id");
 
+// 로그아웃
 function handleClickLogout(e) {
     e.preventDefault();
     document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     window.location.href = "/";
 };
-
 document.getElementById("logout").addEventListener("click", handleClickLogout);
 
-function getCategoryFromHash() {
-    return window.location.hash.replace("#", "") || null; // 기본값 설정
-}
-
+// 전체 링크 조회
 async function renderList(category) {
     let data;
 
     if (!accessToken) return window.location.href = "/index.html";
-
-    const headerTitle = document.getElementById("dashboard_header_title");
-    headerTitle.innerText = `어서오세요, ${userId} 님!`;
 
     const ul = document.getElementById("dashboard_post_list");
     ul.innerHTML = "";
@@ -68,8 +62,7 @@ async function renderList(category) {
         label.classList.add("post_title");
         spanId.classList.add("post_id");
 
-        a.href = item?.url;
-        a.target = '_blank';
+        a.href = `/weblink.html?link=${item?.id}`;
         spanTag.textContent = `# ${categoryObj[item?.category]}`;
         label.textContent = `${item?.name}`;
         spanId.textContent = `${item?.created_by} 님`;
@@ -82,14 +75,34 @@ async function renderList(category) {
     });
 }
 
+// 해시태그 이동
+function getCategoryFromHash() {
+    const hashTag = window.location.hash.replace("#", "") || null;
+    return hashTag;
+};
 function updateList() {
     const category = getCategoryFromHash();
     renderList(category);
-}
+    document.querySelectorAll("li#header_nav_button").forEach(li => {
+        li.style.backgroundColor = "";
+        li.style.fontWeight = "";
+    });
 
+    if (!category) {
+        const tagButton = document.querySelector(`li#header_nav_button a[href=""]`)?.closest("li");
+        tagButton.style.backgroundColor = "#356997";
+        tagButton.style.fontWeight = "600";
+        return;
+    };
+
+    const tagButton = document.querySelector(`li#header_nav_button a[href="#${category}"]`)?.closest("li");
+    tagButton.style.backgroundColor = "#356997";
+    tagButton.style.fontWeight = "600";
+}
 window.addEventListener("hashchange", updateList);
 updateList();
 
+// 업로드 모달 창 열기
 function handleClickAddLinkModalOpen() {
     const modalBg = document.getElementById("modal_background");
     const modalBox = document.getElementById("modal_container");
@@ -99,6 +112,7 @@ function handleClickAddLinkModalOpen() {
 };
 document.getElementById("add_link_button").addEventListener("click", handleClickAddLinkModalOpen);
 
+// 업로드 모달 창 닫기
 function handleClickCloseModal(e) {
     e.preventDefault();
     const modalBg = document.getElementById("modal_background");
@@ -109,6 +123,7 @@ function handleClickCloseModal(e) {
 };
 document.getElementById("modal_close_button").addEventListener("click", handleClickCloseModal);
 
+// 링크 업로드
 function handleClickUploadLink(e) {
     e.preventDefault();
     const name = document.querySelector('input[name="name"]').value;
@@ -137,7 +152,7 @@ function handleClickUploadLink(e) {
         .then(data => {
             if (data.state === 200) {
                 alert(data.message);
-                window.location.href = "/";
+                window.location.href = "";
             } else {
                 alert(data.message);
             };
