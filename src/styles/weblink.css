@@ -1,6 +1,42 @@
 .link_detail_container {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: start;
+  gap: 40px;
+}
+
+.link_detail_lane {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  gap: 16px;
+}
+
+.link_detail_lane_expired {
+  font-size: 1rem;
+  font-weight: 700;
+  user-select: none;
+}
+
+.link_detail_information {
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-decoration: start;
+}
+
+.link_detail_a {
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-decoration: start;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.link_detail_a:hover {
+  text-decoration: underline;
+  color: #6d6d6d;
 }

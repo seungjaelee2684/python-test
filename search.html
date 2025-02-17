@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="src/styles/weblink.css?v=1.0">
-  <link rel="stylesheet" href="src/styles/main.css?v=1.0">
-  <link rel="stylesheet" href="src/styles/header.css?v=1.0">
-  <link rel="stylesheet" href="src/styles/join.css?v=1.0">
-  <title>게시물 상세 | Web Donation</title>
+  <title>Web Donation</title>
+  <link rel="stylesheet" href="/src/styles/join.css?v=1.0">
+  <link rel="stylesheet" href="/src/styles/main.css?v=1.0">
+  <link rel="stylesheet" href="/src/styles/header.css?v=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
@@ -69,38 +69,9 @@
       </section>
       <section class="dashboard_container">
         <div class="dashboard_wrapper">
-          <h1 id="dashboard_title" class="dashboard_title"></h1>
-          <h2 class="dashboard_sub_title">Sharing</h2>
-          <ul id="sharing_list" class="sharing_list">
-            <button class="sharing_add_button">+</button>
-            <li id="sharing_user" class="sharing_user">
-              <div class="sharing_user_circle">s</div>
-              <div class="sharing_user_id">sean2684</div>
-            </li>
-            <li id="sharing_user" class="sharing_user">
-              <div class="sharing_user_circle">s</div>
-              <div class="sharing_user_id">silverfrog</div>
-            </li>
-            <li id="sharing_user" class="sharing_user">
-              <div class="sharing_user_circle">d</div>
-              <div class="sharing_user_id">daum</div>
-            </li>
-          </ul>
-          <h2 class="dashboard_sub_title">Information</h2>
-          <div class="link_detail_container">
-            <div id="link_detail_lane" class="link_detail_lane">
-              <label id="link_detail_lane_expired" class="link_detail_lane_expired">
-                링크 주소
-              </label>
-              <a id="link_detail_a" class="link_detail_a">https://www.naver.com</a>
-            </div>
-            <div id="link_detail_lane" class="link_detail_lane">
-              <label id="link_detail_lane_expired" class="link_detail_lane_expired">
-                설명
-              </label>
-              <p class="link_detail_information">네이버 주소입니다.</p>
-            </div>
-          </div>
+          <h1 class="dashboard_title">Search</h1>
+          <h2 class="dashboard_sub_title">Link</h2>
+          <ul id="dashboard_post_list" class="dashboard_post_list"></ul>
         </div>
       </section>
       <section id="modal_background" class="modal_background">
@@ -156,7 +127,7 @@
     </article>
   </main>
 
-  <script src="src/scripts/weblink.js"></script>
+  <script src="/src/scripts/search.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인 및 회원가입 | Web Donation</title>
+  <link rel="stylesheet" href="/src/styles/join.css?v=1.0">
+</head>
+
+<body>
+  <main>
+    <article>
+      <section class="main_login_form">
+        <div id="bg_form_container">
+          내 계정에 로그인
+        </div>
+        <form id="login_form_container_1">
+          <h1 class="form_title">Login</h1>
+          <div class="input_wrapper">
+            <input
+              id="login_id"
+              type="text"
+              class="form_input"
+              autocomplete="off"
+              placeholder="">
+            <label for="" class="form_label">ID</label>
+          </div>
+          <div class="input_wrapper">
+            <input
+              id="login_password"
+              type="password"
+              class="form_input"
+              autocomplete="off"
+              placeholder="">
+            <label for="" class="form_label">PASSWORD</label>
+          </div>
+          <div id="login_error_text" class="error_text"></div>
+          <div class="button_wrapper">
+            <button id="login" class="primary_button" type="submit" form="login_form_container_1">
+              Login
+            </button>
+            <button id="goSignup" class="outline_button" type="button">
+              Go to Sign up
+            </button>
+          </div>
+        </form>
+        <form id="login_form_container_2">
+          <h1 class="form_title">Sign up</h1>
+          <div class="input_container">
+            <label for="" class="form_label_default">ID</label>
+            <div class="input_wrapper">
+              <input
+                id="signup_id"
+                type="text"
+                class="form_input"
+                autocomplete="off"
+                placeholder="아이디를 입력해주세요.">
+            </div>
+          </div>
+          <div class="input_container">
+            <label for="" class="form_label_default">Password</label>
+            <div class="input_wrapper">
+              <input
+                id="signup_password"
+                type="password"
+                class="form_input"
+                autocomplete="off"
+                placeholder="비밀번호를 입력해주세요.">
+            </div>
+          </div>
+          <div class="input_container">
+            <label for="" class="form_label_default">Password Current</label>
+            <div class="input_wrapper">
+              <input
+                id="signup_password_current"
+                type="password"
+                class="form_input"
+                autocomplete="off"
+                placeholder="비밀번호를 입력해주세요.">
+            </div>
+          </div>
+          <div id="signup_error_text" class="error_text"></div>
+          <div class="button_wrapper">
+            <button id="goLogin" class="outline_button" type="button">
+              Go to Login
+            </button>
+            <button id="signup" class="primary_button" type="submit" form="login_form_container_2">
+              Sign up
+            </button>
+          </div>
+        </form>
+      </section>
+    </article>
+  </main>
+
+  <script src="/src/scripts/join.js"></script>
+</body>
+
+</html>
