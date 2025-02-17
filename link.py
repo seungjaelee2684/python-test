@@ -40,6 +40,35 @@ def inquiry():
   else:
     return jsonify({"state": 401, "error": "조회에 실패하였습니다..."}), 401
   
+# 웹 링크 상세 조회
+@link.route("/inquiry/detail", methods=["GET"])
+@cross_origin(origins="http://localhost:8000")
+def detail():
+  link_id = request.args.get("link")
+  authorization_header = request.headers.get("Authorization")
+
+  if authorization_header:
+    access_token = authorization_header.split(" ")[1]
+    verify_token = decode_token(access_token)
+  else:
+    verify_token = False
+
+  if verify_token:
+    try:
+      conn = sqlite3.connect("users.db")
+      conn.row_factory = sqlite3.Row
+      cursor = conn.cursor()
+      cursor.execute("SELECT * FROM links WHERE id = ?", (link_id,))
+
+      link = cursor.fetchone()
+      conn.close()
+  
+      return jsonify({"state": 200, "data": dict(link), "message": "조회에 성공하였습니다!"}), 200
+    except Exception as e:
+      return jsonify({"state": 403, "error": "조회에 실패하였습니다..."}), 403
+  else:
+    return jsonify({"state": 401, "error": "조회에 실패하였습니다..."}), 401
+  
 # 웹 링크 업로드
 @link.route("/upload", methods=["POST"])
 @cross_origin(origins="http://localhost:8000")
