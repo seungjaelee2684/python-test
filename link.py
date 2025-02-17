@@ -21,24 +21,32 @@ def inquiry():
   
   links = []
 
-  if verify_token:
-    try:
-      conn = sqlite3.connect("users.db")
-      conn.row_factory = sqlite3.Row
-      cursor = conn.cursor()
+  try:
+    conn = sqlite3.connect("users.db")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+      
+    if tag: cursor.execute("SELECT * FROM links WHERE category = ?", (tag,))
+    else: cursor.execute("SELECT * FROM links")
 
-      if tag:
-        cursor.execute("SELECT * FROM links WHERE category = ?", (tag,))
-      else:
-        cursor.execute("SELECT * FROM links")
+    rows = cursor.fetchall()
 
-      links: List[Dict[str, Any]] = [dict(row) for row in cursor.fetchall()]
-      conn.close()
-      return jsonify({"state": 200, "data": links, "message": "조회에 성공하였습니다!"}), 200
-    except Exception as e:
-      return jsonify({"state": 403, "error": "조회에 실패하였습니다..."}), 403
-  else:
-    return jsonify({"state": 401, "error": "조회에 실패하였습니다..."}), 401
+    if verify_token:
+      user_id = verify_token.get("sub")
+      links = [
+        {**dict(row), "is_owner": row["created_by"] == user_id}
+          for row in rows
+        ]
+      status_code = 200
+    else:
+      links = [dict(row) for row in rows]
+      status_code = 201
+    conn.close()
+  except Exception as e:
+    return jsonify({"state": 403, "error": "조회에 실패하였습니다..."}), 403
+  finally:
+    conn.close()
+  return jsonify({"state": status_code, "data": links, "message": "조회에 성공하였습니다!"}), status_code
   
 # 웹 링크 상세 조회
 @link.route("/inquiry/detail", methods=["GET"])
@@ -53,21 +61,25 @@ def detail():
   else:
     verify_token = False
 
-  if verify_token:
-    try:
-      conn = sqlite3.connect("users.db")
-      conn.row_factory = sqlite3.Row
-      cursor = conn.cursor()
-      cursor.execute("SELECT * FROM links WHERE id = ?", (link_id,))
+  try:
+    conn = sqlite3.connect("users.db")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM links WHERE id = ?", (link_id,))
+    row = cursor.fetchone()
 
-      link = cursor.fetchone()
-      conn.close()
-  
-      return jsonify({"state": 200, "data": dict(link), "message": "조회에 성공하였습니다!"}), 200
-    except Exception as e:
-      return jsonify({"state": 403, "error": "조회에 실패하였습니다..."}), 403
-  else:
-    return jsonify({"state": 401, "error": "조회에 실패하였습니다..."}), 401
+    if verify_token:
+      user_id = verify_token.get("sub")
+      link = {**dict(row), "is_owner": row["created_by"] == user_id}
+      status_code = 200
+    else:
+      link = row
+      status_code = 201
+  except Exception as e:
+    return jsonify({"state": 403, "error": "조회에 실패하였습니다..."}), 403
+  finally:
+    conn.close()
+  return jsonify({"state": status_code, "data": dict(link), "message": "조회에 성공하였습니다!"}), status_code
   
 # 웹 링크 업로드
 @link.route("/upload", methods=["POST"])
@@ -103,3 +115,47 @@ def upload():
       conn.close()
   else:
     return jsonify({"state": 401, "message": "업로드에 실패하였습니다..."}), 401
+  
+# 검색
+@link.route("/search", methods=["POST"])
+@cross_origin(origins="http://localhost:8000")
+def search():
+  data = request.get_json()
+  tag = data.get("tag")
+  word = data.get("word")
+  authorization_header = request.headers.get("Authorization")
+
+  if authorization_header:
+    access_token = authorization_header.split(" ")[1]
+    verify_token = decode_token(access_token)
+  else:
+    verify_token = False
+
+  try:
+    conn = sqlite3.connect("users.db")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    if tag == "name":
+      cursor.execute("SELECT * FROM links WHERE name LIKE ?", ('%' + word + '%',))
+    else:
+      cursor.execute("SELECT * FROM links WHERE category = ?", (word,))
+
+    rows = cursor.fetchall()
+
+    if verify_token:
+      user_id = verify_token.get("sub")
+      search_link = [
+        {**dict(row), "is_owner": row["created_by"] == user_id}
+          for row in rows
+        ]
+      status_code = 200
+    else:
+      search_link = [dict(row) for row in rows]
+      status_code = 201
+  except Exception as e:
+    print(word)
+    return jsonify({"state": 403, "error": "조회에 실패하였습니다..."}), 403
+  finally:
+    conn.close()
+  return jsonify({"state": status_code, "data": search_link, "message": "조회에 성공하였습니다!"}), status_code
