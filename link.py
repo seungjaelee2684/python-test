@@ -2,7 +2,6 @@ import sqlite3
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import decode_token
 from flask_cors import cross_origin
-from typing import List, Dict, Any
 
 link = Blueprint('link', __name__)
 
@@ -95,26 +94,34 @@ def upload():
   url = data.get("url")
   category = data.get("category")
   description = data.get("description")
-  shared_id = data.get("shared_id")
 
   if verify_token:
     conn = sqlite3.connect("users.db")
     cursor = conn.cursor()
-    
+
     try:
       cursor.execute("""
-        INSERT INTO links (created_by, name, url, category, description, shared_id)
-        VALUES (?, ?, ?, ?, ?, ?)
-      """, (user_id, name, url, category, description, shared_id))   
-      conn.commit()   
-      
+        INSERT INTO links (created_by, name, url, category, description)
+        VALUES (?, ?, ?, ?, ?)
+      """, (user_id, name, url, category, description))
+      conn.commit()
+      post_id = cursor.lastrowid
+
+      cursor.execute("""
+        INSERT INTO rights (post_id, user_id, can_read, can_write)
+        VALUES (?, ?, ?, ?)
+      """, (post_id, user_id, True, True))
+      conn.commit()
+
       return jsonify({"state": 200, "message": "업로드에 성공하였습니다!"}), 200
     except Exception as e:
+      conn.rollback()  # 오류 발생 시 롤백
       return jsonify({"state": 403, "error": str(e), "message": "업로드에 실패하였습니다..."}), 403
     finally:
       conn.close()
   else:
     return jsonify({"state": 401, "message": "업로드에 실패하였습니다..."}), 401
+
   
 # 검색
 @link.route("/search", methods=["POST"])

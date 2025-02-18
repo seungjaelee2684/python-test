@@ -174,16 +174,14 @@ document.getElementById("modal_close_button").addEventListener("click", handleCl
 function handleClickUploadLink(e) {
     e.preventDefault();
     const name = document.querySelector('input[name="name"]').value;
-    const description = document.querySelector('input[name="description"]').value;
+    const description = document.querySelector('textarea[name="description"]').value;
     const url = document.querySelector('input[name="url"]').value;
-    const shared_id = document.querySelector('input[name="shared_id"]').value;
     const category = document.querySelector('input[name="category"]:checked').value;
 
     const uploadData = {
         name: name,
         description: description,
         url: url,
-        shared_id: (shared_id.length > 0) ? JSON.stringify([shared_id]) : JSON.stringify([]),
         category: category
     };
 
