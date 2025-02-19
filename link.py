@@ -71,24 +71,28 @@ def detail():
       user_id = verify_token.get("sub")
       link = {**dict(row), "is_owner": row["created_by"] == user_id}
       status_code = 200
+      conn.close()
+      return jsonify({"state": status_code, "data": dict(link), "message": "조회에 성공하였습니다!"}), status_code
     else:
-      link = row
-      status_code = 201
+      status_code = 404
+      conn.close()
+      return jsonify({"state": status_code, "message": "읽기 권한이 없습니다."}), status_code
   except Exception as e:
     return jsonify({"state": 403, "error": "조회에 실패하였습니다..."}), 403
-  finally:
-    conn.close()
-  return jsonify({"state": status_code, "data": dict(link), "message": "조회에 성공하였습니다!"}), status_code
   
 # 웹 링크 업로드
 @link.route("/upload", methods=["POST"])
 @cross_origin(origins="http://localhost:8000")
 def upload():
   authorization_header = request.headers.get("Authorization")
-  access_token = authorization_header.split(" ")[1]
-  verify_token = decode_token(access_token)
-  user_id = verify_token.get("sub")
 
+  if authorization_header:
+    access_token = authorization_header.split(" ")[1]
+    verify_token = decode_token(access_token)
+    user_id = verify_token.get("sub")
+  else:
+    verify_token = False
+ 
   data = request.get_json()
   name = data.get("name")
   url = data.get("url")
@@ -115,13 +119,88 @@ def upload():
 
       return jsonify({"state": 200, "message": "업로드에 성공하였습니다!"}), 200
     except Exception as e:
-      conn.rollback()  # 오류 발생 시 롤백
+      conn.rollback()
       return jsonify({"state": 403, "error": str(e), "message": "업로드에 실패하였습니다..."}), 403
     finally:
       conn.close()
   else:
     return jsonify({"state": 401, "message": "업로드에 실패하였습니다..."}), 401
 
+# 링크 업데이트
+@link.route("/update", methods=["PUT"])
+@cross_origin(origins="http://localhost:8000")
+def link_update():
+  authorization_header = request.headers.get("Authorization")
+
+  if authorization_header:
+    access_token = authorization_header.split(" ")[1]
+    verify_token = decode_token(access_token)
+  else:
+    verify_token = False
+
+  data = request.get_json()
+  post_id = data.get("post_id")
+  name = data.get("name")
+  url = data.get("url")
+  category = data.get("category")
+  description = data.get("description")
+
+  if verify_token:
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+
+    try:
+      cursor.execute("""
+        UPDATE links
+        SET name = ?, url = ?, category = ?, description = ?
+        WHERE id = ?
+      """, (name, url, category, description, post_id))
+      conn.commit()
+
+      return jsonify({"state": 200, "message": "업데이트에 성공하였습니다!"}), 200
+    except Exception as e:
+      conn.rollback()
+      return jsonify({"state": 403, "error": str(e), "message": "업데이트에 실패하였습니다..."}), 403
+    finally:
+      conn.close()
+  else:
+    return jsonify({"state": 401, "message": "업데이트에 실패하였습니다..."}), 401
+
+# 링크 삭제
+@link.route("/delete", methods=["DELETE"])
+@cross_origin(origins="http://localhost:8000")
+def delete():
+  authorization_header = request.headers.get("Authorization")
+
+  if authorization_header:
+    access_token = authorization_header.split(" ")[1]
+    verify_token = decode_token(access_token)
+  else:
+    verify_token = False
+
+  post_id = request.args.get("post_id")
+
+  if verify_token:
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+
+    try:
+      cursor.execute("""
+        DELETE FROM links WHERE id = ?
+      """, (post_id,))
+      cursor.execute("""
+        DELETE FROM rights WHERE id = ?
+      """, (post_id,))
+      conn.commit()
+
+      return jsonify({"state": 200, "message": "삭제에 성공하였습니다!"}), 200
+    except Exception as e:
+      conn.rollback()
+      return jsonify({"state": 403, "error": str(e), "message": "삭제에 실패하였습니다..."}), 403
+    finally:
+      conn.close()
+  else:
+    return jsonify({"state": 401, "message": "삭제에 실패하였습니다..."}), 401
   
 # 검색
 @link.route("/search", methods=["POST"])

@@ -5,6 +5,7 @@ from flask_cors import cross_origin
 
 right = Blueprint('right', __name__)
 
+# 권한 추가
 @right.route("/add", methods=["POST"])
 @cross_origin(origins="http://localhost:8000")
 def add():
@@ -51,9 +52,9 @@ def add():
     
     cursor.execute("""
       SELECT EXISTS (
-        SELECT 1 FROM rights WHERE user_id = ?
+        SELECT 1 FROM rights WHERE user_id = ? AND post_id = ?
       ) AS is_exist;
-    """, (shared_id,))
+    """, (shared_id, post_id))
     is_save = cursor.fetchone()
 
     if is_save[0] == 1:
@@ -74,7 +75,8 @@ def add():
       conn.close()
   else:
     return jsonify({"state": 401, "message": "업로드에 실패하였습니다..."}), 401
-  
+
+# 권한 조회
 @right.route("/inquiry", methods=["GET"])
 @cross_origin(origins="http://localhost:8000")
 def right_inquiry():
@@ -147,7 +149,8 @@ def right_inquiry_detail():
 
   return jsonify({"state": 200, "data": dict(right), "message": "조회에 성공하였습니다!"}), 200
 
-@right.route("/update", methods=["POST"])
+# 권한 업데이트
+@right.route("/update", methods=["PUT"])
 @cross_origin(origins="http://localhost:8000")
 def update():
   authorization_header = request.headers.get("Authorization")
