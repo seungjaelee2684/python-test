@@ -85,7 +85,7 @@ function updateSharingId(e) {
   };
 
   fetch(`http://127.0.0.1:5000/right/update`, {
-    method: "POST",
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${accessToken}`
@@ -94,7 +94,98 @@ function updateSharingId(e) {
   })
     .then(res => res.json())
     .then(data => {
-      console.log(data.message);
+      if (data.state === 200) {
+        alert(data.message);
+        window.location.href = "";
+      } else {
+        alert(data.message);
+      };
+    });
+};
+
+function updateLinkOpenModal(e, getData) {
+  e.preventDefault();
+  if (!accessToken) return alert("로그인이 필요한 서비스입니다.");
+  if (!getData) return;
+  const modalBg = document.getElementById("modal_background");
+  const modalBox = document.getElementById("modal_container");
+  modalBg.style.visibility = "visible";
+  modalBox.style.visibility = "visible";
+  modalBox.style.opacity = "1";
+
+  const userNameValue = document.querySelector('input[id="link_name"][name="name"]');
+  const urlValue = document.querySelector('input[id="link_name"][name="url"]');
+  const descriptionValue = document.querySelector('textarea[id="link_name"][name="description"]');
+  const radioValue = document.querySelector(`input[name="category"][value="${getData?.category}"]`);
+
+  if (userNameValue) userNameValue.value = getData?.name ?? "";
+  if (urlValue) urlValue.value = getData?.url ?? "";
+  if (descriptionValue) descriptionValue.value = getData?.description ?? "";
+  if (radioValue) radioValue.checked = true;
+
+  function updateLinkHandle(e) {
+    e.preventDefault();
+  
+    if (!accessToken) return window.location.href = "/";
+  
+    const userNameValue = document.querySelector('input[id="link_name"][name="name"]').value;
+    const urlValue = document.querySelector('input[id="link_name"][name="url"]').value;
+    const descriptionValue = document.querySelector('textarea[id="link_name"][name="description"]').value;
+    const radioUpdate = document.querySelector(`input[name="category"]:checked`).value;
+  
+    const updateLinkData = {
+      post_id: getData?.id,
+      name: userNameValue,
+      url: urlValue,
+      description: descriptionValue,
+      category: radioUpdate
+    };
+    console.log(updateLinkData);
+  
+    fetch("http://127.0.0.1:5000/link/update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(updateLinkData)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.state === 200) {
+          alert(data.message);
+          window.location.href = "";
+        } else {
+          alert(data.message);
+        };
+      });
+  };
+  document.getElementById("modal_upload_button").addEventListener("click", updateLinkHandle);
+};
+
+function deleteLinkHandle(e, postId) {
+  e.preventDefault();
+  if (!postId) return;
+  if (!accessToken) return window.location.href = "/";
+  
+  const isDelete = confirm("정말 삭제하시겠습니까?");
+  if (!isDelete) return;
+
+  fetch(`http://127.0.0.1:5000/link/delete?post_id=${postId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}`
+    }
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.state === 200) {
+        alert(data.message);
+        window.location.href = "/";
+      } else {
+        alert(data.message);
+      };
     });
 };
 
@@ -172,6 +263,14 @@ async function renderLink(linkId) {
       headers: headers,
     });
 
+    if (!response.ok) {
+      if (response.status === 404) {
+        alert("읽기 권한이 없습니다.");
+        window.location.href = "/";
+      };
+      return;
+    };
+
     data = await response.json();
   } catch (error) {
     console.error("error: ", error.message);
@@ -246,10 +345,18 @@ async function renderLink(linkId) {
   const is_right = shared_list_result?.find(item => (item.user_id === myId) && (item.can_write === 1));
   if (is_right) {
     const div3 = document.getElementById("write_button_wrapper");
-    div3.innerHTML = `
-      <button id="change_button" class="write_button">수정</button>
-      <button id="remove_button" class="write_button">삭제</button>
-    `;
+    div3.innerHTML = (result?.is_owner)
+      ? `
+        <button id="change_button" class="write_button">수정</button>
+        <button id="remove_button" class="write_button">삭제</button>
+      `
+      : `
+        <button id="change_button" class="write_button">수정</button>
+      `;
+    const writeButton = document.getElementById("change_button");
+    writeButton?.addEventListener("click", (e) => updateLinkOpenModal(e, result));
+    const deleteButton = document.getElementById("remove_button");
+    deleteButton?.addEventListener("click", (e) => deleteLinkHandle(e, result?.id))
   };
   console.log("test", is_right);
 };
@@ -298,14 +405,16 @@ function handleClickUploadLink(e) {
   const name = document.querySelector('input[name="name"]').value;
   const description = document.querySelector('input[name="description"]').value;
   const url = document.querySelector('input[name="url"]').value;
-  const shared_id = document.querySelector('input[name="shared_id"]').value;
   const category = document.querySelector('input[name="category"]:checked').value;
+
+  if (name.length <= 0) return alert("링크 이름을 입력해주세요.");
+  if (url.length <= 0) return alert("링크 주소를 입력해주세요.");
+  if (category.length <= 0) return alert("카테고리를 선택해주세요.");
 
   const uploadData = {
     name: name,
     description: description,
     url: url,
-    shared_id: (shared_id.length > 0) ? JSON.stringify([shared_id]) : JSON.stringify([]),
     category: category
   };
 
@@ -334,6 +443,8 @@ function handleSubmitSharingUser(e) {
   const userId = document.getElementById("sharing_user_id").value;
   const checkboxRead = document.getElementById("checkbox_input_read").checked;
   const checkboxWrite = document.getElementById("checkbox_input_write").checked;
+
+  if (userId.length <= 0) return alert("아이디를 입력해주세요.");
 
   const addData = {
     post_id: post_id,
