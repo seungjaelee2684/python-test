@@ -75,8 +75,13 @@ function postHandleClickSignup(e) {
         password: password
     };
 
+    const idRegex = /^(?=.*[a-z])(?=.*\d)[a-z\d]{3,16}$/;
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&,.])[A-Za-z\d@$!%*?&,.]{8,}$/;
+
     if (id.length <= 0) return errorText.innerText = "아이디를 입력해주세요.";
     if (password.length <= 0) return errorText.innerText = "비밀번호를 입력해주세요.";
+    if (!idRegex.test(id)) return errorText.innerText = "아이디는 3~16자리, 영문(소문자)과 숫자조합이어야 합니다.";
+    if (!passwordRegex.test(password)) return errorText.innerText = "비밀번호는 최소 8자리 이상, 영문, 숫자, 특수문자를 포함해야 합니다.";
     if (password !== passwordCurrent) return errorText.innerText = "입력하신 비밀번호가 서로 일치하지 않습니다.";
 
     fetch("http://127.0.0.1:5000/auth/register", {
