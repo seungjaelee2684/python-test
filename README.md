@@ -1,1 +1,2 @@
-# python-test
+# 이승재 [Frontend Developer]
+
