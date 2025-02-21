@@ -140,7 +140,6 @@ function updateLinkOpenModal(e, getData) {
       description: descriptionValue,
       category: radioUpdate
     };
-    console.log(updateLinkData);
   
     fetch("http://127.0.0.1:5000/link/update", {
       method: "PUT",
@@ -227,8 +226,6 @@ async function handleClickOpenUpdateShared(e, rightId) {
   userId.value = rightResult?.user_id;
   checkboxRead.checked = Boolean(rightResult?.can_read);
   checkboxWrite.checked = Boolean(rightResult?.can_write);
-
-  console.log(rightResult);
 };
 
 // 전체 링크 조회
@@ -277,9 +274,7 @@ async function renderLink(linkId) {
   };
 
   const result = data?.data;
-  console.log(result);
   const dashboardTitle = document.getElementById("dashboard_title");
-  console.log("🚀 ~ renderLink ~ dashboardTitle:", dashboardTitle)
   dashboardTitle.innerText = `${result?.name}`;
   post_id = result?.id;
 
@@ -319,7 +314,6 @@ async function renderLink(linkId) {
   };
 
   const shared_list_result = shared_list?.data;
-  console.log(shared_list_result);
   shared_list_result?.forEach(item => {
     const li = document.createElement("li");
     const div1 = document.createElement("div");
@@ -338,8 +332,7 @@ async function renderLink(linkId) {
 
     if (data?.data?.is_owner && item?.user_id !== myId) {
       li?.addEventListener("click", (e) => handleClickOpenUpdateShared(e, item?.id));
-    }
-    console.log(data?.data?.is_owner);
+    };
   });
 
   const is_right = shared_list_result?.find(item => (item.user_id === myId) && (item.can_write === 1));
@@ -358,7 +351,6 @@ async function renderLink(linkId) {
     const deleteButton = document.getElementById("remove_button");
     deleteButton?.addEventListener("click", (e) => deleteLinkHandle(e, result?.id))
   };
-  console.log("test", is_right);
 };
 
 function updateLink() {
@@ -452,7 +444,6 @@ function handleSubmitSharingUser(e) {
     can_read: checkboxRead,
     can_write: checkboxWrite
   };
-  console.log(addData);
 
   fetch("http://127.0.0.1:5000/right/add", {
     method: "POST",
