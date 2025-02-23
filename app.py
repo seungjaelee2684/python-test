@@ -7,6 +7,7 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
+from database import create_table, create_links_table, create_rights_table
 
 app = Flask(__name__)
 CORS(app, resources={
@@ -19,6 +20,11 @@ load_dotenv()
 
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 jwt = JWTManager(app)
+
+with app.app_context():
+  create_table()
+  create_links_table()
+  create_rights_table()
 
 app.register_blueprint(auth, url_prefix='/auth')
 app.register_blueprint(link, url_prefix='/link')
