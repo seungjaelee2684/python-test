@@ -109,6 +109,8 @@
 }
 
 #join_button {
+    min-width: fit-content;
+    width: fit-content;
     font-size: 1.2rem;
     font-weight: 700;
     background-color: transparent;
@@ -451,115 +453,41 @@
         padding: 0px 20px 0px 20px;
     }
     
-    .dashboard_header_wrapper {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .dashboard_header_title_wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 40px;
-    }
-    
     #dashboard_header_title {
-        font-size: 1.2rem;
-        font-weight: 600;
+        display: none;
     }
     
     .header_search_box {
-        width: 500px;
-        height: 42px;
-        border: 1px solid;
-        border-radius: 8px;
-        color: #ffffff;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        gap: 4px;
-        padding: 0px 10px;
+        width: 240px;
+        height: 34px;
+        font-size: 0.8rem;
     }
     
     .search_icon_box {
-        min-width: 24px;
-        width: 24px;
-        height: 24px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
+        min-width: 20px;
+        width: 20px;
+        height: 20px;
     }
     
     .search_icon_circle {
-        width: 16px;
-        height: 16px;
-        border-radius: 100%;
-        border: 2px solid #ffffff;
-        position: absolute;
-        top: 0;
-        left: 0;
+        width: 14px;
+        height: 14px;
     }
     
     .search_icon_line {
-        width: 2px;
-        height: 8px;
-        background-color: #ffffff;
-        position: absolute;
+        height: 6px;
         bottom: 4px;
-        right: 7px;
-        transform: rotate(-45deg);
-    }
-    
-    .header_search {
-        width: 100%;
-        height: 100%;
-        outline: none;
-        border: none;
-        color: #fefefe;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        background-color: transparent;
+        right: 6px;
     }
     
     .search_tag_button {
-        min-width: fit-content;
-        background-color: transparent;
-        border: none;
-        outline: none;
-        color: #e9e9e9;
-        margin-left: 8px;
-        transition: all 0.2s;
-        cursor: pointer;
-    }
-    
-    .header_search_box>button:first-child {
-        color: #ffffff;
-        font-weight: 700;
-    }
-    
-    .search_tag_button:hover {
-        color: #ffffff;
+        margin-left: 4px;
+        font-size: 0.8rem;
     }
     
     #join_button {
-        font-size: 1.2rem;
-        font-weight: 700;
-        background-color: transparent;
-        border: none;
-        outline: none;
-        color: #16456e;
-        transition: all 0.2s;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 4px;
-        padding: 8px 16px;
-        border-radius: 4px;
-        cursor: pointer;
+        font-size: 1rem;
+        padding: 4px 8px;
     }
     
     #join_button:hover {
@@ -571,44 +499,21 @@
     }
     
     .dashboard_wrapper {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        align-items: start;
-        padding: 0px 40px;
-    }
-    
-    .dashboard_title_wrapper {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        padding: 0px;
     }
     
     .dashboard_title {
-        font-size: 1.8rem;
-        font-weight: 700;
-        margin-bottom: 40px;
-        user-select: none;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
     }
     
     .write_button_wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 16px;
+        gap: 8px;
     }
     
     .write_button {
-        font-size: 1.2rem;
+        font-size: 1rem;
         font-weight: 600;
-        color: #16456e;
-        transition: all 0.2s;
-        cursor: pointer;
-        background-color: transparent;
-        border: none;
-        outline: none;
     }
     
     .write_button:hover {
@@ -616,160 +521,35 @@
     }
     
     .dashboard_sub_title {
-        font-size: 1.2rem;
-        font-weight: 700;
-        margin-bottom: 40px;
-        user-select: none;
+        font-size: 1rem;
+        margin-bottom: 20px;
     }
     
     .sharing_list {
-        width: 100%;
-        display: flex;
-        justify-content: start;
-        align-items: start;
-        gap: 24px;
-        overflow-x: auto;
-        margin-bottom: 60px;
+        gap: 16px;
+        margin-bottom: 30px;
     }
     
     .sharing_add_button {
-        min-width: 80px;
-        min-height: 80px;
-        width: 80px;
-        height: 80px;
-        border: 1px solid;
-        color: #A7C7E7;
-        border-radius: 100%;
-        background-color: transparent;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 2rem;
-        font-weight: 700;
-        transition: all 0.2s;
-        cursor: pointer;
-    }
-    
-    .sharing_add_button:hover {
-        color: #619fd5;
-    }
-    
-    .sharing_user {
-        width: fit-content;
-        height: fit-content;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 8px;
+        min-width: 60px;
+        min-height: 60px;
+        width: 60px;
+        height: 60px;
+        font-size: 1.6rem;
     }
     
     .sharing_user_circle {
-        width: 80px;
-        height: 80px;
-        border-radius: 100%;
-        background-color: #619fd5;
-        color: #fefefe;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 2rem;
-        font-weight: 700;
-        text-transform: uppercase;
+        width: 60px;
+        height: 60px;
+        font-size: 1.6rem;
     }
     
     .sharing_user_id {
-        font-size: 1rem;
-        font-weight: 500;
-        text-align: center;
-    }
-    
-    .dashboard_post_list {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 16px;
-    }
-    
-    .dashboard_post_lane {
-        width: 100%;
-        height: 160px;
-        padding: 16px;
-        background-color: #619fd5;
-        border-radius: 8px;
-        transition: all 0.2s;
-        color: #fefefe;
-        cursor: pointer;
-    }
-    
-    .dashboard_post_lane:hover {
-        background-color: #A7C7E7;
-    }
-    
-    .post_link {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: start;
-        gap: 16px;
-    }
-    
-    .post_tag {
-        width: 100%;
-        display: flex;
-        justify-content: start;
         font-size: 0.8rem;
     }
     
-    .post_title {
-        font-size: 1.8rem;
-        font-weight: 700;
-        text-align: start;
-    }
-    
-    .post_id {
-        width: 100%;
-        font-size: 1rem;
-        font-weight: 500;
-        display: flex;
-        justify-content: end;
-    }
-    
-    .modal_background {
-        width: 100%;
-        height: 100dvh;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 15;
-        backdrop-filter: blur(3px);
-        background-color: #33333380;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: all 0.2s;
-        visibility: hidden;
-    }
-    
     .modal_container {
-        width: 500px;
-        height: 90dvh;
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        align-items: start;
-        gap: 24px;
-        padding: 30px 20px;
-        box-shadow: 0px 0px 4px 0px #33333380;
-        background-color: #ffffff;
-        border-radius: 8px;
-        transition: all 0.4s;
-        visibility: hidden;
-        opacity: 0;
+        width: 94%;
     }
     
     .modal_title {
@@ -780,15 +560,7 @@
     }
     
     .input_content_wrapper {
-        width: 100%;
-        height: 100%;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        align-items: start;
-        gap: 8px;
-        padding: 16px;
+        padding: 0px;
     }
     
     .input_tag_label {

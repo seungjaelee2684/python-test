@@ -8,13 +8,17 @@
   <link rel="stylesheet" href="src/styles/main.css?v=1.0">
   <link rel="stylesheet" href="src/styles/header.css?v=1.0">
   <link rel="stylesheet" href="src/styles/join.css?v=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <title>게시물 상세 | Web Donation</title>
 </head>
 
 <body>
   <main>
     <article>
-      <header class="header_container">
+      <button id="open_header_button" class="open_header_button">
+        <i class="fas fa-bars"></i>
+      </button>
+      <header id="header_container" class="header_container">
         <nav class="header_nav_container">
           <a href="/" class="header_title">Web Donation</a>
           <ul class="header_nav_list">
@@ -170,6 +174,7 @@
   </main>
 
   <script src="src/scripts/weblink.js"></script>
+  <script src="/src/scripts/header.js"></script>
 </body>
 
 </html>

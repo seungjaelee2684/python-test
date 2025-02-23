@@ -1,23 +1,41 @@
 function handleClickGotoSignup(e) {
     e.preventDefault();
-    const divBox = document.getElementById("bg_form_container");
-    const formBox1 = document.getElementById("login_form_container_1");
-    const formBox2 = document.getElementById("login_form_container_2");
-    divBox.style.transform = "translateX(-100%)";
-    divBox.innerText = "새로운 계정을 만들어보세요!";
-    formBox1.style.opacity = "0";
-    formBox2.style.opacity = "1";
+    const width = window.innerWidth;
+
+    if (width < 1040) {
+        const formBox1 = document.getElementById("login_form_container_1");
+        const formBox2 = document.getElementById("login_form_container_2");
+        formBox1.style.transform = "translateX(-100%)";
+        formBox2.style.transform = "translateX(-100%)";
+    } else {
+        const divBox = document.getElementById("bg_form_container");
+        const formBox1 = document.getElementById("login_form_container_1");
+        const formBox2 = document.getElementById("login_form_container_2");
+        divBox.style.transform = "translateX(-100%)";
+        divBox.innerText = "새로운 계정을 만들어보세요!";
+        formBox1.style.opacity = "0";
+        formBox2.style.opacity = "1";
+    };
 };
 
 function handleClickGotoLogin(e) {
     e.preventDefault();
-    const divBox = document.getElementById("bg_form_container");
-    const formBox1 = document.getElementById("login_form_container_1");
-    const formBox2 = document.getElementById("login_form_container_2");
-    divBox.style.transform = "translateX(0)";
-    divBox.innerText = "내 계정에 로그인";
-    formBox2.style.opacity = "0";
-    formBox1.style.opacity = "1";
+    const width = window.innerWidth;
+
+    if (width < 1040) {
+        const formBox1 = document.getElementById("login_form_container_1");
+        const formBox2 = document.getElementById("login_form_container_2");
+        formBox1.style.transform = "translateX(0)";
+        formBox2.style.transform = "translateX(0)";
+    } else {
+        const divBox = document.getElementById("bg_form_container");
+        const formBox1 = document.getElementById("login_form_container_1");
+        const formBox2 = document.getElementById("login_form_container_2");
+        divBox.style.transform = "translateX(0)";
+        divBox.innerText = "내 계정에 로그인";
+        formBox2.style.opacity = "0";
+        formBox1.style.opacity = "1";
+    };
 };
 
 document.getElementById("goSignup").addEventListener("click", handleClickGotoSignup);
