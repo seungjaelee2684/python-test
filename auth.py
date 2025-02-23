@@ -45,14 +45,3 @@ def login():
         access_token = create_access_token(identity=username, expires_delta=timedelta(hours=1))
         return jsonify({"state": 201, "access_token": access_token, "user_id": username}), 201
     return jsonify({"state": 400, "error": "잘못된 로그인 정보입니다."}), 400
-
-# 인증된 사용자만 접근 가능
-@auth.route("/protected", methods=["GET"])
-@cross_origin(origins="http://localhost:8000")
-@jwt_required()
-def protected():
-    current_user = get_jwt_identity()
-    return jsonify({"message": f"안녕하세요, {current_user}님!"}), 200
-
-if __name__ == "__main__":
-    auth.run(debug=True)
